@@ -28,6 +28,16 @@ export const getPartners = async () => {
   return newPartners;
 };
 
+export const getPartnersByNames = async (partner_1: any, partner_2: any) => {
+  const partners = await AppDataSource.getRepository(Partners)
+    .createQueryBuilder("partners")
+    .where({ partner_1: partner_1, partner_2: partner_2 })
+    .orWhere({ partner_1: partner_2, partner_2: partner_1 })
+    .getOne();
+
+  return partners;
+};
+
 export const addPartners = async (
   partners: PartnersInterface
 ): Promise<Partners> => {
