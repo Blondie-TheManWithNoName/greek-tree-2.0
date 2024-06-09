@@ -1,36 +1,3 @@
-// import express from "express";
-// import "reflect-metadata";
-
-// import { myDataSource } from "../app-data-source";
-
-// import Gods from "./routes/gods";
-
-// // establish database connection
-// myDataSource
-//   .initialize()
-//   .then(() => {
-//     console.log("Data Source has been initialized!");
-//   })
-//   .catch((err) => {
-//     console.error("Error during Data Source initialization:", err);
-//   });
-
-// const app = express();
-// app.use(express.json()); // middleware req.body transformations
-
-//
-
-// app.use("/api/gods", Gods);
-
-// app.get("/ping", (_req, res) => {
-//   console.log("someone pinged");
-//   res.send("pang");
-// });
-
-// app.listen(PORT, () => {
-//   console.log(`Server running on port ${PORT}`);
-// });
-
 import express, { Request, Response, NextFunction } from "express";
 import { AppDataSource } from "./app-data-source";
 import { Routes } from "./routes";
