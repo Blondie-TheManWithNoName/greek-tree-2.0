@@ -2,6 +2,7 @@ import {
   addPartners,
   deletePartners,
   getPartners,
+  getPartnersById,
   getPartnersByNames,
 } from "../services/PartnersServices";
 import { Request, Response } from "express";
@@ -9,6 +10,11 @@ import { Request, Response } from "express";
 export class PartnersController {
   async all(_req: Request, res: Response) {
     const partners = await getPartners();
+    res.status(200).json(partners);
+  }
+
+  async oneById(req: Request, res: Response) {
+    const partners = await getPartnersById(+req.params.id);
     res.status(200).json(partners);
   }
 

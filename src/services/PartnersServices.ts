@@ -28,6 +28,22 @@ export const getPartners = async () => {
   return newPartners;
 };
 
+export const getPartnersById = async (id: number) => {
+  const partners = await AppDataSource.getRepository(Partners).findOne({
+    where: { id: id },
+    relations: ["partner_1", "partner_2", "children"], // Specify the relation names here
+  });
+
+  if (!partners) throw Error(`Couldn't find partners with id: ${id}`);
+
+  const newPartners = {
+    partner_1: partners.partner_1.name,
+    partner_2: partners.partner_2.name,
+    children: partners.children.map((child) => child.child.name),
+  };
+  return newPartners;
+};
+
 export const getPartnersByNames = async (partner_1: any, partner_2: any) => {
   const partners = await AppDataSource.getRepository(Partners)
     .createQueryBuilder("partners")

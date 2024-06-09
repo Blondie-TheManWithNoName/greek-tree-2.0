@@ -53,7 +53,13 @@ export const Routes = [
     action: "all",
     validation: [],
   },
-
+  {
+    method: "get",
+    route: "/partners/:id",
+    controller: PartnersController,
+    action: "oneById",
+    validation: [param("id").isNumeric()],
+  },
   {
     method: "get",
     route: "/partners",
