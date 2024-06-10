@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryColumn } from "typeorm";
+import { Entity, Column, PrimaryColumn, OneToMany } from "typeorm";
 import { IsDefined } from "class-validator";
+import { Partners } from "./Partners.entity";
 
 @Entity()
 export class God {
@@ -24,4 +25,10 @@ export class God {
   //   @ManyToMany(() => Partners)
   //   @JoinTable()
   //   partners: Partners[];
+
+  @OneToMany(() => Partners, (partners) => partners.partner_1)
+  partnersAsPartner1: Partners[];
+
+  @OneToMany(() => Partners, (partners) => partners.partner_2)
+  partnersAsPartner2: Partners[];
 }

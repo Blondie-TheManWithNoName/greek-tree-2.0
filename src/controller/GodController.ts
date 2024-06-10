@@ -1,9 +1,10 @@
 import { addGod, getGodByName, getGods } from "../services/godsServices";
 import { Request, Response } from "express";
+import { parseBoolean } from "../utils";
 
 export class GodController {
-  async all(_req: Request, res: Response) {
-    const gods = await getGods();
+  async all(req: Request, res: Response) {
+    const gods = await getGods(parseBoolean(req.query.id));
     res.status(200).json(gods);
   }
 
