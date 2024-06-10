@@ -1,4 +1,4 @@
-import { body, param, query } from "express-validator";
+import { body, param } from "express-validator";
 import { GodController } from "./controller/GodController";
 import { PartnersController } from "./controller/PartnersController";
 import { ChildController } from "./controller/ChildController";
@@ -60,16 +60,12 @@ export const Routes = [
     action: "oneById",
     validation: [param("id").isNumeric()],
   },
-  {
-    method: "get",
-    route: "/partners",
-    controller: PartnersController,
-    action: "oneByNames",
-    validation: [
-      query("p1").isString().notEmpty(),
-      query("p2").isString().notEmpty(),
-    ],
-  },
+  //   {
+  //     method: "get",
+  //     route: "/partners",
+  //     controller: PartnersController,
+  //     action: "oneByNames",
+  //   },
   {
     method: "post",
     route: "/partners",

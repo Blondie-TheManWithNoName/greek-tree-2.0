@@ -8,8 +8,11 @@ import {
 import { Request, Response } from "express";
 
 export class PartnersController {
-  async all(_req: Request, res: Response) {
-    const partners = await getPartners();
+  async all(req: Request, res: Response) {
+    const partners = await getPartners(
+      req.query.p1 as string,
+      req.query.p2 as string
+    );
     res.status(200).json(partners);
   }
 

@@ -5,8 +5,8 @@ import { Partners } from "../entity/Partners.entity";
 import { PartnersInterface } from "../types";
 import { getGodByName } from "./godsServices";
 
-export const getPartners = async () => {
-  const partners = await AppDataSource.getRepository(Partners)
+export const getPartners = async (p1?: string, p2?: string) => {
+  const partnersQuery = AppDataSource.getRepository(Partners)
     .createQueryBuilder("partners")
     .leftJoin("partners.partner_1", "partner1")
     .leftJoin("partners.partner_2", "partner2")
@@ -18,8 +18,16 @@ export const getPartners = async () => {
       "partner2.name",
       "children.id",
       "child.name",
-    ])
-    .getMany();
+    ]);
+
+  if (p1 !== undefined && p2 !== undefined) {
+    partnersQuery
+      .andWhere("partner1.name = :p1 AND partner2.name = :p2", { p1, p2 })
+      .orWhere("partner1.name = :p2 AND partner2.name = :p1", { p1, p2 });
+  }
+
+  const partners = await partnersQuery.getMany();
+
   const newPartners = partners.map((item) => ({
     partner_1: item.partner_1.name,
     partner_2: item.partner_2.name,
