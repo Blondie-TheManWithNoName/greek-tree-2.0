@@ -1,7 +1,4 @@
 import { DataSource } from "typeorm";
-import { God } from "./entity/God.entity";
-import { Partners } from "./entity/Partners.entity";
-import { Child } from "./entity/Child.entity";
 
 export const AppDataSource = new DataSource({
   type: "mysql",
@@ -10,7 +7,8 @@ export const AppDataSource = new DataSource({
   username: "root",
   password: "root",
   database: "greek-tree",
-  entities: [God, Partners, Child],
+  entities: ["build/**/*entity.{ts,js}"],
+  migrations: ["build/migrations/*.{ts,js}"],
   logging: false,
   synchronize: true,
 });
