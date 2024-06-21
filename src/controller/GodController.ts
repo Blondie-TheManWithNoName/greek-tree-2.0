@@ -1,4 +1,4 @@
-import { addGod, getGodByName, getGods } from "../services/godsServices";
+import { addGod, getGodByName, getGods } from "../services/GodsServices";
 import { Request, Response } from "express";
 import { parseBoolean } from "../utils";
 

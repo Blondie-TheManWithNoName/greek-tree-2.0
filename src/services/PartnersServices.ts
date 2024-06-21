@@ -3,7 +3,7 @@
 import { AppDataSource } from "../app-data-source";
 import { Partners } from "../entity/Partners.entity";
 import { PartnersInterface } from "../types";
-import { getGodByName } from "./godsServices";
+// import { getGodByName } from "./godsServices";
 
 export const getPartners = async (p1?: string, p2?: string) => {
   const partnersQuery = AppDataSource.getRepository(Partners)
@@ -65,8 +65,8 @@ export const getPartnersByNames = async (partner_1: any, partner_2: any) => {
 export const addPartners = async (
   partners: PartnersInterface
 ): Promise<Partners> => {
-  await getGodByName(partners.partner_1);
-  await getGodByName(partners.partner_2);
+  // await getGodByName(partners.partner_1);
+  // await getGodByName(partners.partner_2);
 
   const checkPartners = await AppDataSource.getRepository(Partners)
     .createQueryBuilder("partners")

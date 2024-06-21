@@ -8,18 +8,18 @@ export class God {
   @IsDefined()
   name: string;
 
-  @Column()
+  @Column({ default: true })
   @IsDefined()
   gender: boolean;
+  // @IsDefined()
 
-  @Column("text")
-  @IsDefined()
+  @Column({ type: "text", nullable: true })
   description: string;
 
-  @Column()
+  @Column({ default: "Greek" })
   greekName: string;
 
-  @Column()
+  @Column({ default: "RomanGod" })
   romanName: string;
 
   //   @ManyToMany(() => Partners)
