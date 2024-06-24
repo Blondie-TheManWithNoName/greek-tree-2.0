@@ -1,7 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, OneToMany, ManyToOne } from "typeorm";
 import { IsDefined } from "class-validator";
 import { God } from "./God.entity";
-import { Child } from "./Child.entity";
 
 @Entity()
 export class Partners {
@@ -18,6 +17,6 @@ export class Partners {
   @IsDefined()
   partner_2: God;
 
-  @OneToMany(() => Child, (child) => child.parents)
-  children: Child[];
+  @OneToMany(() => God, (god) => god.parents)
+  children: God[];
 }

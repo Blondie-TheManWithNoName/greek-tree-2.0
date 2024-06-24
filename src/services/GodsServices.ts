@@ -65,11 +65,11 @@ export const getGodByName = async (name: string): Promise<God> => {
   return god;
 };
 
-export const addGod = async (god: God): Promise<God> => {
-  const check = await AppDataSource.getRepository(God).findOneBy({
-    name: god.name,
-  });
-  if (check) throw Error("God already exists.");
-  const add = await AppDataSource.getRepository(God).save(god);
-  return add;
-};
+// export const addGod = async (god: God): Promise<God> => {
+//   const check = await AppDataSource.getRepository(God).findOneBy({
+//     name: god.name,
+//   });
+//   if (check) throw Error("God already exists.");
+//   const add = await AppDataSource.getRepository(God).save(god);
+//   return add;
+// };

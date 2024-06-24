@@ -1,9 +1,20 @@
 import { body, param } from "express-validator";
 import { GodController } from "./controller/GodController";
 import { PartnersController } from "./controller/PartnersController";
-import { ChildController } from "./controller/ChildController";
+import { PagesController } from "./controller/PagesController";
 
 export const Routes = [
+  {
+    method: "get",
+    route: "/",
+    controller: PagesController,
+    action: "index",
+    validation: [],
+  },
+
+  ////////////
+  //  GODS  //
+  ///////////
   {
     method: "get",
     route: "/gods",
@@ -79,23 +90,5 @@ export const Routes = [
     controller: PartnersController,
     action: "remove",
     validation: [param("id").isNumeric()],
-  },
-
-  ////////////
-  //CHILDREN//
-  ///////////
-  {
-    method: "get",
-    route: "/children",
-    controller: ChildController,
-    action: "all",
-    validation: [],
-  },
-  {
-    method: "post",
-    route: "/children",
-    controller: ChildController,
-    action: "save",
-    validation: [body("name").isString(), body("parents_id").isNumeric()],
   },
 ];

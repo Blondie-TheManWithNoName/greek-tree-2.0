@@ -37,7 +37,7 @@ const getPartners = (p1, p2) => __awaiter(void 0, void 0, void 0, function* () {
     const newPartners = partners.map((item) => ({
         partner_1: item.partner_1.name,
         partner_2: item.partner_2.name,
-        children: item.children.map((child) => child.child.name),
+        children: item.children.map((child) => child.name),
     }));
     return newPartners;
 });
@@ -52,7 +52,7 @@ const getPartnersById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const newPartners = {
         partner_1: partners.partner_1.name,
         partner_2: partners.partner_2.name,
-        children: partners.children.map((child) => child.child.name),
+        children: partners.children.map((child) => child.name),
     };
     return newPartners;
 });

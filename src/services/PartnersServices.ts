@@ -31,7 +31,7 @@ export const getPartners = async (p1?: string, p2?: string) => {
   const newPartners = partners.map((item) => ({
     partner_1: item.partner_1.name,
     partner_2: item.partner_2.name,
-    children: item.children.map((child) => child.child.name),
+    children: item.children.map((child) => child.name),
   }));
   return newPartners;
 };
@@ -47,7 +47,7 @@ export const getPartnersById = async (id: number) => {
   const newPartners = {
     partner_1: partners.partner_1.name,
     partner_2: partners.partner_2.name,
-    children: partners.children.map((child) => child.child.name),
+    children: partners.children.map((child) => child.name),
   };
   return newPartners;
 };

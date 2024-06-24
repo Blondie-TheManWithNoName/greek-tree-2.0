@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryColumn, OneToMany } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryColumn,
+  OneToMany,
+  ManyToOne,
+  JoinColumn,
+} from "typeorm";
 import { IsDefined } from "class-validator";
 import { Partners } from "./Partners.entity";
 
@@ -14,6 +21,9 @@ export class God {
   // @IsDefined()
 
   @Column({ type: "text", nullable: true })
+  title: string;
+
+  @Column({ type: "text", nullable: true })
   description: string;
 
   @Column({ default: "Greek" })
@@ -22,9 +32,9 @@ export class God {
   @Column({ default: "RomanGod" })
   romanName: string;
 
-  //   @ManyToMany(() => Partners)
-  //   @JoinTable()
-  //   partners: Partners[];
+  @ManyToOne(() => Partners, (parents) => parents.id)
+  @JoinColumn({ name: "parentsId" })
+  parents: Partners;
 
   @OneToMany(() => Partners, (partners) => partners.partner_1)
   partnersAsPartner1: Partners[];
