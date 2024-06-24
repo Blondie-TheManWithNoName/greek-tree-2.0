@@ -4,18 +4,16 @@ import { parseBoolean } from "../utils";
 
 export class GodController {
   async all(req: Request, res: Response) {
-    const gods = await getGods(parseBoolean(req.query.id));
+    const gods = await getGods(
+      parseInt(req.query.limit as string) || 20,
+      parseInt(req.query.offset as string) || 0
+    );
     res.status(200).json(gods);
   }
 
   async one(req: Request, res: Response) {
     const name = req.params.name;
-    const god = await getGodByName(name);
+    const god = await getGodByName(name, parseBoolean(req.query.id));
     res.status(200).json(god);
   }
-
-  // async save(req: Request, res: Response) {
-  //   await addGod(req.body);
-  //   res.status(200).json("Added succesfully!");
-  // }
 }
