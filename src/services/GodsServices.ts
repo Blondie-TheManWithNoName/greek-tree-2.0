@@ -73,11 +73,22 @@ export const getGodByName = async (name: string, names: boolean = false) => {
     description: god.description,
     greekName: god.greekName,
     romanName: god.romanName,
-    parentsId: god.parents.id,
+    parentsId: god.parents?.id || null,
     partners: partners,
   };
 
   if (names) (godInfo as any).partnersNames = partnersNames;
 
   return godInfo;
+};
+
+export const getRandom = async () => {
+  const queryBuilder = AppDataSource.getRepository(God).createQueryBuilder();
+
+  const count = await queryBuilder.getCount();
+  const randomIndex = Math.floor(Math.random() * count);
+
+  const randomName = await queryBuilder.offset(randomIndex).limit(1).getOne();
+  console.log("name:", randomName);
+  return getGodByName(randomName?.name || "Apollo");
 };

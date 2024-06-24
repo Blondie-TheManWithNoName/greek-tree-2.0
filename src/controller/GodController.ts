@@ -1,4 +1,4 @@
-import { getGodByName, getGods } from "../services/GodsServices";
+import { getGodByName, getGods, getRandom } from "../services/GodsServices";
 import { Request, Response } from "express";
 import { parseBoolean } from "../utils";
 
@@ -13,7 +13,15 @@ export class GodController {
 
   async one(req: Request, res: Response) {
     const name = req.params.name;
-    const god = await getGodByName(name, parseBoolean(req.query.partnersNames));
-    res.status(200).json(god);
+    if (name === "random" || name === "rand") {
+      const god = await getRandom();
+      res.status(200).json(god);
+    } else {
+      const god = await getGodByName(
+        name,
+        parseBoolean(req.query.partnersNames)
+      );
+      res.status(200).json(god);
+    }
   }
 }
