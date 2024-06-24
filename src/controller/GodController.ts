@@ -13,7 +13,7 @@ export class GodController {
 
   async one(req: Request, res: Response) {
     const name = req.params.name;
-    const god = await getGodByName(name, parseBoolean(req.query.id));
+    const god = await getGodByName(name, parseBoolean(req.query.partnersNames));
     res.status(200).json(god);
   }
 }
