@@ -30,7 +30,7 @@ export const getGods = async (limit: number, offset: number) => {
     // prettier-ignore
     previous:
       offset - limit >= 0 ? `https://api.theogonia.net/gods?limit=${limit}&offset=${offset - limit}`
-      : (limit - offset > 0) ? `https://api.theogonia.net/gods?limit=${limit - offset}&offset=0`
+      : (limit - offset > 0 && offset !== 0) ? `https://api.theogonia.net/gods?limit=${limit - offset}&offset=0`
       : null,
 
     results: formattedGods,
