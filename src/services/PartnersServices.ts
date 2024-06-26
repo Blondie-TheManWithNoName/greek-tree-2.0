@@ -2,38 +2,73 @@
 
 import { AppDataSource } from "../app-data-source";
 import { Partners } from "../entity/Partners.entity";
-import { PartnersInterface } from "../types";
+// import { PartnersInterface } from "../types";
 // import { getGodByName } from "./godsServices";
 
-export const getPartners = async (p1?: string, p2?: string) => {
-  const partnersQuery = AppDataSource.getRepository(Partners)
-    .createQueryBuilder("partners")
-    .leftJoin("partners.partner_1", "partner1")
-    .leftJoin("partners.partner_2", "partner2")
-    .leftJoin("partners.children", "children")
-    .leftJoin("children.child", "child")
-    .select([
-      "partners.id",
-      "partner1.name",
-      "partner2.name",
-      "children.id",
-      "child.name",
-    ]);
-
-  if (p1 !== undefined && p2 !== undefined) {
-    partnersQuery
-      .andWhere("partner1.name = :p1 AND partner2.name = :p2", { p1, p2 })
-      .orWhere("partner1.name = :p2 AND partner2.name = :p1", { p1, p2 });
+export const getPartners = async (
+  limit: number,
+  offset: number,
+  p1?: string,
+  p2?: string
+) => {
+  let result: any[] = [];
+  let count = 0;
+  const partnersRepository = AppDataSource.getRepository(Partners);
+  if (p1 === undefined && p2 === undefined) {
+    [result, count] = await partnersRepository.findAndCount({
+      skip: offset,
+      take: limit,
+      relations: ["partner_1", "partner_2"],
+    });
+  } else {
+    if (p1 === undefined || p2 === undefined) {
+      if (p1 !== undefined) {
+        [result, count] = await partnersRepository.findAndCount({
+          skip: offset,
+          take: limit,
+          where: [{ partner_1: { name: p1 } }, { partner_2: { name: p1 } }],
+          relations: ["partner_1", "partner_2"],
+        });
+      } else {
+        [result, count] = await partnersRepository.findAndCount({
+          skip: offset,
+          take: limit,
+          where: [{ partner_1: { name: p2 } }, { partner_2: { name: p2 } }],
+          relations: ["partner_1", "partner_2"],
+        });
+      }
+    } else {
+      [result, count] = await partnersRepository.findAndCount({
+        skip: offset,
+        take: limit,
+        where: [
+          { partner_1: { name: p1 }, partner_2: { name: p2 } },
+          { partner_1: { name: p2 }, partner_2: { name: p1 } },
+        ],
+        relations: ["partner_1", "partner_2"],
+      });
+    }
   }
-
-  const partners = await partnersQuery.getMany();
-
-  const newPartners = partners.map((item) => ({
-    partner_1: item.partner_1.name,
-    partner_2: item.partner_2.name,
-    children: item.children.map((child) => child.name),
+  result = result.map((item) => ({
+    id: item.id,
+    partner1: item.partner_1.name,
+    partner2: item.partner_2.name,
+    url: `https://api.theogonia.net/partners/${item.id}`,
   }));
-  return newPartners;
+  return {
+    count: count,
+    // prettier-ignore
+    next:
+          offset + limit < count ? 
+          `https://api.theogonia.net/relationships?limit=${limit}&offset=${offset + limit}`
+           : null,
+    // prettier-ignore
+    previous:
+          offset - limit >= 0 ? `https://api.theogonia.net/relationship?limit=${limit}&offset=${offset - limit}`
+          : (limit - offset > 0 && offset !== 0) ? `https://api.theogonia.net/relationship?limit=${limit - offset}&offset=0`
+          : null,
+    results: result,
+  };
 };
 
 export const getPartnersById = async (id: number) => {
@@ -45,6 +80,7 @@ export const getPartnersById = async (id: number) => {
   if (!partners) throw Error(`Couldn't find partners with id: ${id}`);
 
   const newPartners = {
+    id: id,
     partner_1: partners.partner_1.name,
     partner_2: partners.partner_2.name,
     children: partners.children.map((child) => child.name),
@@ -52,40 +88,40 @@ export const getPartnersById = async (id: number) => {
   return newPartners;
 };
 
-export const getPartnersByNames = async (partner_1: any, partner_2: any) => {
-  const partners = await AppDataSource.getRepository(Partners)
-    .createQueryBuilder("partners")
-    .where({ partner_1: partner_1, partner_2: partner_2 })
-    .orWhere({ partner_1: partner_2, partner_2: partner_1 })
-    .getOne();
+// export const getPartnersByNames = async (partner_1: any, partner_2: any) => {
+//   const partners = await AppDataSource.getRepository(Partners)
+//     .createQueryBuilder("partners")
+//     .where({ partner_1: partner_1, partner_2: partner_2 })
+//     .orWhere({ partner_1: partner_2, partner_2: partner_1 })
+//     .getOne();
 
-  return partners;
-};
+//   return partners;
+// };
 
-export const addPartners = async (
-  partners: PartnersInterface
-): Promise<Partners> => {
-  // await getGodByName(partners.partner_1);
-  // await getGodByName(partners.partner_2);
+// export const addPartners = async (
+//   partners: PartnersInterface
+// ): Promise<Partners> => {
+//   // await getGodByName(partners.partner_1);
+//   // await getGodByName(partners.partner_2);
 
-  const checkPartners = await AppDataSource.getRepository(Partners)
-    .createQueryBuilder("partners")
-    .where({ partner_1: partners.partner_1, partner_2: partners.partner_2 })
-    .orWhere({ partner_1: partners.partner_2, partner_2: partners.partner_1 })
-    .getOne();
+//   const checkPartners = await AppDataSource.getRepository(Partners)
+//     .createQueryBuilder("partners")
+//     .where({ partner_1: partners.partner_1, partner_2: partners.partner_2 })
+//     .orWhere({ partner_1: partners.partner_2, partner_2: partners.partner_1 })
+//     .getOne();
 
-  if (checkPartners) throw Error("Partners already exists.");
+//   if (checkPartners) throw Error("Partners already exists.");
 
-  const { partner_1, partner_2 } = partners;
-  const newPartners = Object.assign(new Partners(), {
-    partner_1,
-    partner_2,
-  });
+//   const { partner_1, partner_2 } = partners;
+//   const newPartners = Object.assign(new Partners(), {
+//     partner_1,
+//     partner_2,
+//   });
 
-  const add = await AppDataSource.getRepository(Partners).save(newPartners);
-  return add;
-};
+//   const add = await AppDataSource.getRepository(Partners).save(newPartners);
+//   return add;
+// };
 
-export const deletePartners = async (id: number) => {
-  await AppDataSource.getRepository(Partners).delete(id);
-};
+// export const deletePartners = async (id: number) => {
+//   await AppDataSource.getRepository(Partners).delete(id);
+// };
